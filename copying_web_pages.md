@@ -45,3 +45,20 @@ In this example, the class search page looks identical. However, the search bar 
 
 This is possibly the most tedious and annoying part of this whole process, as there is not much visual difference, and it takes time. Still, we need it for maintainability and sanity.
 
+Start by copying the folder with the date/time string into another directory and renaming it to something more useful. In this example, I renamed the folder `class_search_page/` and put it on my desktop.
+
+![image](https://github.com/user-attachments/assets/875e61f1-6d99-411d-ac54-5eb8be2aa954)
+
+Now open this copied folder in your favorite IDE, for this example I will be using VSCode.
+
+![image](https://github.com/user-attachments/assets/9c223a03-4fa7-4ba1-a025-167786eb8ebb)
+
+Now, here comes the tedious part: Currently, all of the webpage assets (CSS files, images, fonts, etc.) are all jumbled together in the folder, which makes it hard to work with. To fix this, we will be creating an `assets/` folder with subdirectories for the different kinds of assets. Here is what the end product should look like:
+
+![image](https://github.com/user-attachments/assets/f955949d-c0e4-4063-815c-6e21171cdc0b)
+
+After moving all of the files to their new directories and trying to open the HTML file, you will likely see that it is broken. __This is expected__:
+
+![image](https://github.com/user-attachments/assets/0ac1c262-94c0-47f8-8106-65413e3da2a8)
+
+This is because the paths __within__ the files themselves are still pointing to the main directory, even though the files are already there. This means that none of the files can reference each other.
