@@ -1,4 +1,5 @@
 import os
+import shutil
 import re
 
 def create_file_path_dict(root_dir="."):
@@ -43,9 +44,52 @@ def process_files(file_types, file_path_dict, root_dir="."):
                 full_path = os.path.join(dirpath, file)
                 replace_file_names_with_paths_in_file(full_path, file_path_dict)
 
+
+def organize_files_by_extension(folder_path='./'):
+    """
+    Organize files in the given folder by their extensions.
+    
+    Args:
+        folder_path (str): The path to the folder to organize.
+    """
+    # Ensure the folder path exists
+    if not os.path.exists(folder_path):
+        print(f"Error: Folder '{folder_path}' does not exist.")
+        return
+    
+    # Loop through each file in the folder
+    for filename in os.listdir(folder_path):
+        # Get full path of the file
+        file_path = os.path.join(folder_path, filename)
+
+        # Skip directories
+        if os.path.isdir(file_path):
+            continue
+        
+        # Extract the file extension (lowercase to avoid case issues)
+        _, file_extension = os.path.splitext(filename)
+        file_extension = file_extension.lower().strip('.')
+        
+        if file_extension not in ("py", "html"):
+            if not file_extension:
+                # For files without an extension, group into "no_extension"
+                file_extension = "no_extension"
+            
+            # Create a directory for the file extension if it doesn't exist
+            extension_folder = os.path.join(folder_path, file_extension)
+            os.makedirs(extension_folder, exist_ok=True)
+            
+            # Move the file to the corresponding directory
+            shutil.move(file_path, os.path.join(extension_folder, filename))
+    
+    print("Files have been organized by their extensions.")
+
+
 if __name__ == "__main__":
+    organize_files_by_extension()
+
     # Generate the file path dictionary
     file_dict = create_file_path_dict()
 
     # Process HTML and CSS files
-    process_files(file_types=(".html", ".css"), file_path_dict=file_dict)
+    process_files(file_types=(".html", ".css", ".svg"), file_path_dict=file_dict)
