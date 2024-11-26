@@ -76,7 +76,7 @@ def organize_files_by_extension(folder_path='./'):
                 file_extension = "no_extension"
             
             # Create a directory for the file extension if it doesn't exist
-            extension_folder = os.path.join(folder_path, file_extension)
+            extension_folder = os.path.join(folder_path, 'assets')
             os.makedirs(extension_folder, exist_ok=True)
             
             # Move the file to the corresponding directory
@@ -92,4 +92,4 @@ if __name__ == "__main__":
     file_dict = create_file_path_dict()
 
     # Process HTML and CSS files
-    process_files(file_types=(".html", ".css", ".svg"), file_path_dict=file_dict)
+    process_files(file_types=(".html"), file_path_dict=file_dict)
