@@ -24,10 +24,13 @@ def replace_file_names_with_paths_in_file(file_path, file_path_dict):
     # counts the numbers of directories deep a file in compared to the root.
     num_directories = (file_path.count('\\') - 1)
     # prefix added to a files path to escape back to the root.
-    escape_prefix = "..\\" * num_directories
+    escape_prefix = "../" * num_directories
+
+    def flask_pattern(path):
+        return f"{{{{ url_for('static', filename='{path.replace('\\', '/')}') }}}}"
 
     # Replace file names with their paths
-    updated_file_content = file_name_pattern.sub(lambda match: escape_prefix+file_path_dict[match.group()], file_content)
+    updated_file_content = file_name_pattern.sub(lambda match: flask_pattern(escape_prefix+file_path_dict[match.group()]), file_content)
 
     # Write the updated content back to the file
     with open(file_path, "w", encoding="utf-8") as file:
@@ -45,7 +48,7 @@ def process_files(file_types, file_path_dict, root_dir="."):
                 replace_file_names_with_paths_in_file(full_path, file_path_dict)
 
 
-def organize_files_by_extension(folder_path='./'):
+def organize_files_by_extension(folder_name, folder_path='./'):
     """
     Organize files in the given folder by their extensions.
     
@@ -75,8 +78,7 @@ def organize_files_by_extension(folder_path='./'):
                 # For files without an extension, group into "no_extension"
                 file_extension = "no_extension"
             
-            # Create a directory for the file extension if it doesn't exist
-            extension_folder = os.path.join(folder_path, 'assets')
+            extension_folder = os.path.join(folder_path, f'{folder_name}')
             os.makedirs(extension_folder, exist_ok=True)
             
             # Move the file to the corresponding directory
@@ -86,7 +88,7 @@ def organize_files_by_extension(folder_path='./'):
 
 
 if __name__ == "__main__":
-    organize_files_by_extension()
+    organize_files_by_extension('class_results_assets')
 
     # Generate the file path dictionary
     file_dict = create_file_path_dict()
